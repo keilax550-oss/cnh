@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+
+<!-- UTM Persistence: captura e mantém UTMs em toda a navegação -->
+<script>
+(function() {
+  var UTM_KEYS = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid','ttclid','gclid','src','sck'];
+  var STORAGE_KEY = 'utmData';
+
+  // Captura UTMs da URL atual
+  function getUtmsFromUrl() {
+    var params = new URLSearchParams(window.location.search);
+    var utms = {};
+    UTM_KEYS.forEach(function(k) { var v = params.get(k); if (v) utms[k] = v; });
+    return utms;
+  }
+
+  // Salva no localStorage se tiver UTMs na URL
+  var current = getUtmsFromUrl();
+  if (Object.keys(current).length > 0) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(current)); } catch(e) {}
+  }
+
+  // Recupera UTMs salvas
+  function getSavedUtms() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch(e) { return {}; }
+  }
+
+  // Adiciona UTMs como query params na URL atual se não existirem
+  function appendUtmsToUrl() {
+    var utms = getSavedUtms();
+    if (!Object.keys(utms).length) return;
+    var params = new URLSearchParams(window.location.search);
+    var changed = false;
+    UTM_KEYS.forEach(function(k) {
+      if (utms[k] && !params.get(k)) { params.set(k, utms[k]); changed = true; }
+    });
+    if (changed) {
+      var newUrl = window.location.pathname + '?' + params.toString() + window.location.hash;
+      history.replaceState(null, '', newUrl);
+    }
+  }
+
+  // Expõe para uso no app React
+  window._getUtms = getSavedUtms;
+
+  // Aplica na página atual
+  appendUtmsToUrl();
+
+  // Intercepta pushState/replaceState do React Router para manter UTMs
+  var _push = history.pushState.bind(history);
+  var _replace = history.replaceState.bind(history);
+
+  function injectUtms(url) {
+    if (!url || typeof url !== 'string') return url;
+    try {
+      var base = window.location.origin;
+      var full = url.startsWith('/') ? base + url : url;
+      var u = new URL(full);
+      var utms = getSavedUtms();
+      UTM_KEYS.forEach(function(k) {
+        if (utms[k] && !u.searchParams.get(k)) u.searchParams.set(k, utms[k]);
+      });
+      return u.pathname + (u.search ? u.search : '') + u.hash;
+    } catch(e) { return url; }
+  }
+
+  history.pushState = function(state, title, url) {
+    return _push(state, title, injectUtms(url));
+  };
+  history.replaceState = function(state, title, url) {
+    return _replace(state, title, injectUtms(url));
+  };
+})();
+</script>
+
+<!-- Meta Pixel Code -->
+<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init', '4327697327497010');fbq('init', '1078834241324397');fbq('init', '1527029111971432');fbq('track', 'PageView');</script><noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=4327697327497010&ev=PageView&noscript=1"/></noscript>
+<!-- End Meta Pixel Code -->
+  
+<!-- UTMify Pixel -->
+<script> window.pixelId = "6a2200f2ae65ba8b4e8c85c7"; var a = document.createElement("script"); a.setAttribute("async", ""); a.setAttribute("defer", ""); a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js"); document.head.appendChild(a); </script>
+
+<!-- UTMify UTMs -->
+<script
+  src="https://cdn.utmify.com.br/scripts/utms/latest.js"
+  data-utmify-prevent-xcod-sck
+  data-utmify-prevent-subids
+  async
+  defer
+></script>
+
+
+           
+    <style data-vite-theme="" data-inject-first="">
+        :root {
+            --background: 0 0% 100%;
+            --foreground: 20 14.3% 4.1%;
+            --muted: 60 4.8% 95.9%;
+            --muted-foreground: 25 5.3% 44.7%;
+            --popover: 0 0% 100%;
+            --popover-foreground: 20 14.3% 4.1%;
+            --card: 0 0% 100%;
+            --card-foreground: 20 14.3% 4.1%;
+            --border: 20 5.9% 90%;
+            --input: 20 5.9% 90%;
+            --primary: 222 47% 11%;
+            --primary-foreground: 221 8% 97%;
+            --secondary: 60 4.8% 95.9%;
+            --secondary-foreground: 24 9.8% 10%;
+            --accent: 60 4.8% 95.9%;
+            --accent-foreground: 24 9.8% 10%;
+            --destructive: 0 84.2% 60.2%;
+            --destructive-foreground: 60 9.1% 97.8%;
+            --ring: 20 14.3% 4.1%;
+            --radius: 0.5rem;
+        }
+
+        .dark {
+            --background: 240 10% 3.9%;
+            --foreground: 0 0% 98%;
+            --muted: 240 3.7% 15.9%;
+            --muted-foreground: 240 5% 64.9%;
+            --popover: 240 10% 3.9%;
+            --popover-foreground: 0 0% 98%;
+            --card: 240 10% 3.9%;
+            --card-foreground: 0 0% 98%;
+            --border: 240 3.7% 15.9%;
+            --input: 240 3.7% 15.9%;
+            --primary: 222 47% 11%;
+            --primary-foreground: 221 8% 97%;
+            --secondary: 240 3.7% 15.9%;
+            --secondary-foreground: 0 0% 98%;
+            --accent: 240 3.7% 15.9%;
+            --accent-foreground: 0 0% 98%;
+            --destructive: 0 62.8% 30.6%;
+            --destructive-foreground: 0 0% 98%;
+            --ring: 240 4.9% 83.9%;
+            --radius: 0.5rem;
+        }
+    </style>
+
+    <title>gov.br</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <meta property="creator.productor"
+        content="http://estruturaorganizacional.dados.gov.br/id/unidade-organizacional/2981">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/assets/fa5-all.min.css">
+    <style>
+      /* Enquanto a webfont não carrega, zera o caractere quebrado */
+      i.fas, i.far, i.fab { font-family: sans-serif !important; font-style: normal !important; }
+      i.fas::before, i.far::before, i.fab::before { content: '' !important; }
+    </style>
+    <script>
+    (function() {
+      var ICONS = {
+        'fa-ellipsis-v':  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512" style="width:0.125em;height:1em;fill:currentColor;vertical-align:-0.125em;pointer-events:none"><path d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"/></svg>',
+        'fa-cookie-bite': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="width:1em;height:1em;fill:currentColor;vertical-align:-0.125em;pointer-events:none"><path d="M510.203 189.7c-4.5-6.9-12.3-10.9-20.5-10.5-6.5.3-13-.4-19.5-2-42.6-10.8-68.2-53.9-57.5-96.5 2.1-8.2.3-16.8-4.7-23.5s-12.7-10.7-21.1-10.9C377.3 46 368 46 358.7 47.1 245.1 61.3 160 158.6 160 274c0 4.5.1 9 .4 13.4.3 4.4-1.4 8.7-4.6 11.7L55.3 393.1c-22.5 20.9-24.3 56.2-3.4 79.3l6 6.6c21.1 23.2 56.4 24.2 78.8 2.3l208-200c3-2.9 7.1-4.4 11.3-4.2 4.5.2 9.1.4 13.7.4 123 0 223.2-99.7 224-222.7.1-8.4-3.9-16.5-10.2-21.5l-73.3 135zm-254 112.7c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm128-176c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm80 96c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32z"/></svg>',
+        'fa-th':          '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="width:1em;height:1em;fill:currentColor;vertical-align:-0.125em;pointer-events:none"><path d="M149.333 56v80c0 13.255-10.745 24-24 24H24c-13.255 0-24-10.745-24-24V56c0-13.255 10.745-24 24-24h101.333c13.255 0 24 10.745 24 24zm181.334 0v80c0 13.255-10.745 24-24 24H205.333c-13.255 0-24-10.745-24-24V56c0-13.255 10.745-24 24-24h101.334c13.255 0 24 10.745 24 24zm181.333 0v80c0 13.255-10.745 24-24 24H386.667c-13.255 0-24-10.745-24-24V56c0-13.255 10.745-24 24-24H488c13.255 0 24 10.745 24 24zM149.333 216v80c0 13.255-10.745 24-24 24H24c-13.255 0-24-10.745-24-24v-80c0-13.255 10.745-24 24-24h101.333c13.255 0 24 10.745 24 24zm181.334 0v80c0 13.255-10.745 24-24 24H205.333c-13.255 0-24-10.745-24-24v-80c0-13.255 10.745-24 24-24h101.334c13.255 0 24 10.745 24 24zm181.333 0v80c0 13.255-10.745 24-24 24H386.667c-13.255 0-24-10.745-24-24v-80c0-13.255 10.745-24 24-24H488c13.255 0 24 10.745 24 24zM149.333 376v80c0 13.255-10.745 24-24 24H24c-13.255 0-24-10.745-24-24v-80c0-13.255 10.745-24 24-24h101.333c13.255 0 24 10.745 24 24zm181.334 0v80c0 13.255-10.745 24-24 24H205.333c-13.255 0-24-10.745-24-24v-80c0-13.255 10.745-24 24-24h101.334c13.255 0 24 10.745 24 24zm181.333 0v80c0 13.255-10.745 24-24 24H386.667c-13.255 0-24-10.745-24-24v-80c0-13.255 10.745-24 24-24H488c13.255 0 24 10.745 24 24z"/></svg>',
+        'fa-bars':        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="width:0.875em;height:1em;fill:currentColor;vertical-align:-0.125em;pointer-events:none"><path d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg>',
+        'fa-search':      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="width:1em;height:1em;fill:currentColor;vertical-align:-0.125em;pointer-events:none"><path d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>',
+        'fa-user':        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="width:0.875em;height:1em;fill:currentColor;vertical-align:-0.125em;pointer-events:none"><path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/></svg>'
+      };
+      function replaceIcons() {
+        document.querySelectorAll('i.fas, i.far, i.fab').forEach(function(el) {
+          if (el.querySelector('svg')) return; // já tem SVG dentro
+          var cls = Array.from(el.classList).find(function(c) { return ICONS[c]; });
+          if (!cls) return;
+          el.style.fontFamily = 'sans-serif';
+          el.style.fontStyle = 'normal';
+          el.style.lineHeight = '1';
+          el.innerHTML = ICONS[cls];
+        });
+      }
+      var _timer;
+      var obs = new MutationObserver(function() {
+        clearTimeout(_timer);
+        _timer = setTimeout(replaceIcons, 10);
+      });
+      function start() {
+        replaceIcons();
+        obs.observe(document.body, { childList: true, subtree: true });
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', start);
+      } else {
+        start();
+      }
+    })();
+    </script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&amp;display=swap">
+    <style>
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+    </style>
+    <script defer src="assets/index-f8rMPGcv.js"></script>
+    <link rel="stylesheet" href="assets/index-Nk5hQ9Fp.css">
+    <style>
+        body, body * {
+            font-family: 'Open Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif !important;
+        }
+    </style>
+    
+
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+</html>
