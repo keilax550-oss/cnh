@@ -1,7 +1,7 @@
 const { getSupabase } = require("./lib/supabase");
 
 const VIZZION_BASE   = "https://app.vizzionpay.com.br/api/v1";
-const UTMIFY_TOKEN   = "lzASZob4ldSJJc3jT1LILy9alPxWJgpnPhCh";
+const UTMIFY_TOKEN   = process.env.UTMIFY_TOKEN;
 
 async function sendUtmifyPaid(txData, transactionId) {
   try {
