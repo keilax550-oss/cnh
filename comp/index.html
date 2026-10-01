@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Comprovantes</title>
+<style>
+body{font-family:monospace;background:#111;color:#eee;padding:20px;margin:0}
+h1{color:#00ff88;margin-bottom:16px;font-size:18px}
+input[type=text]{padding:8px 12px;background:#222;border:1px solid #444;color:#eee;border-radius:4px;font-family:monospace;width:260px;margin-bottom:16px}
+input[type=text]:focus{outline:none;border-color:#00ff88}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{padding:8px 12px;text-align:left;color:#888;font-size:11px;text-transform:uppercase;border-bottom:1px solid #333;background:#161616}
+td{padding:8px 12px;border-bottom:1px solid #1a1a1a;vertical-align:middle}
+tr:hover td{background:#1a1a1a}
+.btn{padding:4px 12px;background:transparent;color:#00cc66;border:1px solid #00cc66;border-radius:3px;cursor:pointer;font-family:monospace;font-size:11px}
+.btn:hover{background:rgba(0,255,136,.1)}
+.empty{text-align:center;padding:40px;color:#444}
+/* LOGIN */
+#login{display:flex;align-items:center;justify-content:center;min-height:100vh;background:#111}
+#login-box{background:#161616;border:1px solid #333;border-radius:4px;padding:32px;width:280px;text-align:center}
+#login-box h2{color:#00ff88;margin-bottom:20px;font-size:16px}
+#login-box input{width:100%;padding:8px 12px;background:#222;border:1px solid #444;color:#eee;border-radius:4px;font-family:monospace;margin-bottom:12px;box-sizing:border-box}
+#login-box button{width:100%;padding:10px;background:transparent;color:#00ff88;border:1px solid #00ff88;border-radius:3px;cursor:pointer;font-family:monospace;letter-spacing:1px}
+#err{color:#ff4444;font-size:11px;min-height:14px;margin-top:6px}
+</style>
+</head>
+<body>
+
+<div id="login">
+  <div id="login-box">
+    <h2>COMPROVANTES</h2>
+    <input type="password" id="pwd" placeholder="senha" />
+    <button onclick="doLogin()">ENTRAR</button>
+    <p id="err"></p>
+  </div>
+</div>
+
+<div id="app" style="display:none">
+  <h1>Comprovantes</h1>
+  <input type="text" id="search" placeholder="buscar nome ou CPF..." oninput="filter()" />
+  <table>
+    <thead><tr><th>Data</th><th>Nome</th><th>CPF</th><th>Arquivo</th></tr></thead>
+    <tbody id="tbody"><tr><td colspan="4" class="empty">carregando...</td></tr></tbody>
+  </table>
+</div>
+
+<script>
+const SB_URL = 'https://ldyhodwdhavrgyooukpi.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxkeWhvZHdkaGF2cmd5b291a3BpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4NjQxMDUyNCwiZXhwIjoyMTAxOTg2NTI0fQ.JvEtOi46gaL5fAFk8XnUUeEyPTibpC79NwPGMF8SvdY';
+const PASS = 'comp2025@';
+let all = [];
+
+// Mantém login na sessão — não pede senha de novo no F5
+if (sessionStorage.getItem('comp_auth') === 'ok') {
+  document.getElementById('login').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  load();
+}
+
+document.getElementById('pwd').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+
+function doLogin() {
+  if (document.getElementById('pwd').value === PASS) {
+    sessionStorage.setItem('comp_auth', 'ok');
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    load();
+  } else {
+    document.getElementById('err').textContent = 'senha incorreta';
+  }
+}
+
+async function load() {
+  try {
+    const r = await fetch(`${SB_URL}/rest/v1/comprovantes?order=created_at.desc&limit=500`, {
+      headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` }
+    });
+    all = await r.json();
+    render(all);
+  } catch(e) {
+    document.getElementById('tbody').innerHTML = '<tr><td colspan="4" class="empty">erro ao carregar</td></tr>';
+  }
+}
+
+function fmt(d) { if(!d) return '-'; return new Date(d).toLocaleString('pt-BR'); }
+function fmtCpf(c) { if(!c) return '-'; return c.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4'); }
+
+function render(data) {
+  const tbody = document.getElementById('tbody');
+  if (!data || !data.length) {
+    tbody.innerHTML = '<tr><td colspan="4" class="empty">nenhum comprovante</td></tr>';
+    return;
+  }
+  tbody.innerHTML = data.map((c, i) => `<tr>
+    <td style="color:#666;white-space:nowrap">${fmt(c.created_at)}</td>
+    <td>${c.nome || '-'}</td>
+    <td style="font-family:monospace">${fmtCpf(c.cpf)}</td>
+    <td>${c.arquivo ? `<button class="btn" onclick="view(${i})">VER</button>` : '-'}</td>
+  </tr>`).join('');
+}
+
+function filter() {
+  const q = document.getElementById('search').value.toLowerCase();
+  render(all.filter(c => (c.nome||'').toLowerCase().includes(q) || (c.cpf||'').includes(q)));
+}
+
+function view(i) {
+  const src = all[i] && all[i].arquivo;
+  if (!src) { alert('sem arquivo'); return; }
+
+  // Monta o src correto
+  let fullSrc;
+  if (src.startsWith('data:')) {
+    fullSrc = src;
+  } else if (src.startsWith('http')) {
+    fullSrc = src;
+  } else {
+    // Detecta tipo pelo inicio do base64
+    const type = src.startsWith('/9j/') ? 'image/jpeg' :
+                 src.startsWith('iVBOR') ? 'image/png' :
+                 src.startsWith('JVBER') ? 'application/pdf' : 'image/jpeg';
+    fullSrc = `data:${type};base64,${src}`;
+  }
+
+  // Abre em nova aba — resolve problema de imagem grande nao carregar no modal
+  const win = window.open('', '_blank');
+  if (win) {
+    if (fullSrc.includes('application/pdf')) {
+      win.document.write(`<html><body style="margin:0"><embed src="${fullSrc}" width="100%" height="100%" type="application/pdf"/></body></html>`);
+    } else {
+      win.document.write(`<html><body style="margin:0;background:#000;display:flex;align-items:center;justify-content:center;min-height:100vh"><img src="${fullSrc}" style="max-width:100%;max-height:100vh"/></body></html>`);
+    }
+    win.document.close();
+  } else {
+    alert('Permita popups para ver o comprovante');
+  }
+}
+</script>
+</body>
+</html>
