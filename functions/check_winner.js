@@ -6,7 +6,7 @@ const { getSupabase } = require("./lib/supabase");
 const WINNER_BASE   = "https://api.winnerpayy.com.br/api";
 const WINNER_ID     = process.env.WINNER_CLIENT_ID;
 const WINNER_SECRET = process.env.WINNER_CLIENT_SECRET;
-const UTMIFY_TOKEN  = process.env.UTMIFY_TOKEN || "lzASZob4ldSJJc3jT1LILy9alPxWJgpnPhCh";
+const UTMIFY_TOKEN  = process.env.UTMIFY_TOKEN;
 
 function getAuthHeader() {
   if (!WINNER_ID || !WINNER_SECRET) {
