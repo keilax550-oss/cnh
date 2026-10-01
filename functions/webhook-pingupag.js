@@ -19,7 +19,7 @@
 
 const { getSupabase } = require("./lib/supabase");
 
-const UTMIFY_TOKEN = process.env.UTMIFY_TOKEN || "lzASZob4ldSJJc3jT1LILy9alPxWJgpnPhCh";
+const UTMIFY_TOKEN = process.env.UTMIFY_TOKEN;
 
 function jsonResponse(statusCode, body) {
   return {
