@@ -1,0 +1,103 @@
+[build]
+  publish = "."
+  functions = "functions"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Content-Type = "application/javascript; charset=utf-8"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Content-Type = "text/css; charset=utf-8"
+
+[[headers]]
+  for = "/assets/*.css"
+  [headers.values]
+    Content-Type = "text/css; charset=utf-8"
+
+[[headers]]
+  for = "/assets/webfonts/*.woff2"
+  [headers.values]
+    Content-Type = "font/woff2"
+    Access-Control-Allow-Origin = "*"
+
+[[headers]]
+  for = "/assets/webfonts/*.woff"
+  [headers.values]
+    Content-Type = "font/woff"
+    Access-Control-Allow-Origin = "*"
+
+[[headers]]
+  for = "/assets/webfonts/*.ttf"
+  [headers.values]
+    Content-Type = "font/ttf"
+    Access-Control-Allow-Origin = "*"
+
+[[headers]]
+  for = "/assets/webfonts/*.eot"
+  [headers.values]
+    Content-Type = "application/vnd.ms-fontobject"
+    Access-Control-Allow-Origin = "*"
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Content-Type = "text/html; charset=utf-8"
+
+[[redirects]]
+  from = "/api/pix"
+  to = "/.netlify/functions/pix"
+  status = 200
+
+[[redirects]]
+  from = "/api/check-payment"
+  to = "/.netlify/functions/check-payment"
+  status = 200
+
+[[redirects]]
+  from = "/api/notify-approved"
+  to = "/.netlify/functions/notify-approved"
+  status = 200
+
+[[redirects]]
+  from = "/api/comprovantes/upload.php"
+  to = "/.netlify/functions/comprovantes-upload"
+  status = 200
+
+[[redirects]]
+  from = "/api/comprovantes-upload"
+  to = "/.netlify/functions/comprovantes-upload"
+  status = 200
+
+[[redirects]]
+  from = "/api/log-access"
+  to = "/.netlify/functions/log-access"
+  status = 200
+
+[[redirects]]
+  from = "/api/consulta.php"
+  to = "/.netlify/functions/consulta"
+  status = 200
+
+# ── Pingupag ──────────────────────────────────────────────────────────────────
+[[redirects]]
+  from = "/api/pix-pingupag"
+  to = "/.netlify/functions/pix-pingupag"
+  status = 200
+
+[[redirects]]
+  from = "/api/check-payment-pingupag"
+  to = "/.netlify/functions/check-payment-pingupag"
+  status = 200
+
+[[redirects]]
+  from = "/webhook/pingupag"
+  to = "/.netlify/functions/webhook-pingupag"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
