@@ -2,6 +2,10 @@
   publish = "."
   functions = "functions"
 
+[context.production.environment]
+  PINGUPAG_API_KEY = "pingupag_sk_1c131ea43744290c02b678fc91d02ef9251fe758a98e5b3a65cbe9659da0dffb"
+  UTMIFY_TOKEN     = "lzASZob4ldSJJc3jT1LILy9alPxWJgpnPhCh"
+
 [[headers]]
   for = "/*.js"
   [headers.values]
@@ -48,12 +52,12 @@
 
 [[redirects]]
   from = "/api/pix"
-  to = "/.netlify/functions/pix"
+  to = "/.netlify/functions/pix-pingupag"
   status = 200
 
 [[redirects]]
   from = "/api/check-payment"
-  to = "/.netlify/functions/check-payment"
+  to = "/.netlify/functions/check-payment-pingupag"
   status = 200
 
 [[redirects]]
