@@ -2,7 +2,7 @@ const { getSupabase } = require("./lib/supabase");
 
 const PINGUPAG_BASE    = "https://app.pingupag.com";
 const PINGUPAG_API_KEY = process.env.PINGUPAG_API_KEY;
-const UTMIFY_TOKEN     = process.env.UTMIFY_TOKEN || "lzASZob4ldSJJc3jT1LILy9alPxWJgpnPhCh";
+const UTMIFY_TOKEN     = process.env.UTMIFY_TOKEN;
 
 function getApiKey() {
   if (!PINGUPAG_API_KEY) {
