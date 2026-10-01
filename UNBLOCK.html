@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <title>Desbloqueador de Acesso</title>
+</head>
+<body>
+    <h1>Desbloqueador de Funnel</h1>
+    <p>Removendo qualquer restrição de acesso...</p>
+    
+    <script>
+        // Remove qualquer verificação de acesso
+        localStorage.removeItem('accessBlocked');
+        localStorage.removeItem('isBlocked');
+        localStorage.setItem('accessAllowed', 'true');
+        
+        // Remove qualquer sessionStorage
+        sessionStorage.clear();
+        
+        // Define que é permitido
+        window.isAllowed = true;
+        window.accessBlocked = false;
+        
+        // Aguarda um pouco e redireciona para index.html
+        setTimeout(() => {
+            window.location.href = '/';
+        }, 1000);
+    </script>
+</body>
+</html>
