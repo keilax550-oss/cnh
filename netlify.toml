@@ -3,8 +3,11 @@
   functions = "functions"
 
 [context.production.environment]
-  PINGUPAG_API_KEY = "pingupag_sk_1c131ea43744290c02b678fc91d02ef9251fe758a98e5b3a65cbe9659da0dffb"
-  UTMIFY_TOKEN     = "lzASZob4ldSJJc3jT1LILy9alPxWJgpnPhCh"
+  PINGUPAG_API_KEY        = "pingupag_sk_1c131ea43744290c02b678fc91d02ef9251fe758a98e5b3a65cbe9659da0dffb"
+  UTMIFY_TOKEN            = "lzASZob4ldSJJc3jT1LILy9alPxWJgpnPhCh"
+  CPF_TOKEN_AMNESIA       = "4c80cd47-d9d5-4672-a301-b9b8741fc293"
+  CPF_TOKEN_SINTEGRA      = ""
+  CPF_TOKEN_APICPFBRASIL  = ""
 
 [[headers]]
   for = "/*.js"
