@@ -1,20 +1,14 @@
 {
   "version": 2,
   "rewrites": [
-    { "source": "/api/pix",                    "destination": "/api/pix-blackcat" },
-    { "source": "/api/check-payment",          "destination": "/api/check-payment-blackcat" },
-    { "source": "/api/notify-approved",        "destination": "/api/notify-approved" },
-    { "source": "/api/comprovantes/upload.php","destination": "/api/comprovantes-upload" },
-    { "source": "/api/log-access",             "destination": "/api/log-access" },
-    { "source": "/api/consulta.php",           "destination": "/api/consulta" },
-    { "source": "/webhook/blackcat",           "destination": "/api/webhook-blackcat" },
-    { "source": "/api/test-blackcat",          "destination": "/api/test-blackcat-api" },
-    { "source": "/((?!api/).*)",               "destination": "/index.html" }
-  ],
-  "env": {
-    "BLACKCAT_API_KEY":  "@blackcat_api_key",
-    "BLACKCAT_PK":       "@blackcat_pk",
-    "UTMIFY_TOKEN":      "@utmify_token",
-    "CPF_TOKEN_AMNESIA": "@cpf_token_amnesia"
-  }
+    { "source": "/api/pix",                     "destination": "/api/pix-blackcat" },
+    { "source": "/api/check-payment",           "destination": "/api/check-payment-blackcat" },
+    { "source": "/api/notify-approved",         "destination": "/api/notify-approved" },
+    { "source": "/api/comprovantes/upload.php", "destination": "/api/comprovantes-upload" },
+    { "source": "/api/log-access",              "destination": "/api/log-access" },
+    { "source": "/api/consulta.php",            "destination": "/api/consulta" },
+    { "source": "/webhook/blackcat",            "destination": "/api/webhook-blackcat" },
+    { "source": "/api/test-blackcat",           "destination": "/api/test-blackcat-api" },
+    { "source": "/((?!api/).*)",                "destination": "/index.html" }
+  ]
 }
