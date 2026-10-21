@@ -135,26 +135,29 @@ exports.handler = async (event) => {
       return jsonResponse(500, { success:false, error:"Resposta inválida da gateway", debug:text.substring(0,200) });
     }
 
-    // Campos de resposta conforme docs Blackcat
+    // Campos de resposta Blackcat: { success, data: { transactionId, paymentData: { qrCode, qrCodeBase64, copyPaste } } }
     const transactionId = String(
+      parsed.data?.transactionId || parsed.data?.id ||
       parsed.id || parsed.transactionId || parsed.transaction_id ||
-      parsed.saleId || parsed.sale_id || parsed.data?.id || ""
+      parsed.saleId || parsed.sale_id || ""
     );
 
     const pixCode = (
-      parsed.pix?.qrCode      || parsed.pix?.brcode       || parsed.pix?.code        ||
-      parsed.pix?.copyPaste   || parsed.pix?.copy_paste   || parsed.pix?.qr_code     ||
-      parsed.qrCode           || parsed.brcode             || parsed.pixCode          ||
-      parsed.qr_code          || parsed.copypaste          || parsed.copy_paste       ||
-      parsed.data?.pix?.qrCode || parsed.data?.pix?.brcode ||
-      parsed.data?.qrCode     || parsed.data?.brcode       || parsed.data?.copypaste  ||
+      parsed.data?.paymentData?.copyPaste  ||
+      parsed.data?.paymentData?.qrCode     ||
+      parsed.data?.paymentData?.brcode     ||
+      parsed.data?.paymentData?.pix_code   ||
+      parsed.pix?.qrCode      || parsed.pix?.brcode || parsed.pix?.copyPaste ||
+      parsed.qrCode           || parsed.brcode       || parsed.copypaste     ||
+      parsed.data?.qrCode     || parsed.data?.brcode ||
       null
     );
 
     const pixBase64 = (
-      parsed.pix?.qrCodeImage  || parsed.pix?.base64       ||
-      parsed.qrCodeImage       || parsed.qr_code_base64    ||
-      parsed.data?.pix?.qrCodeImage || parsed.data?.qrCodeImage ||
+      parsed.data?.paymentData?.qrCodeBase64 ||
+      parsed.data?.paymentData?.qrCodeImage  ||
+      parsed.pix?.qrCodeImage || parsed.qrCodeImage ||
+      parsed.data?.qrCodeImage ||
       null
     );
 
