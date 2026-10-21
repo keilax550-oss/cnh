@@ -94,9 +94,6 @@ function normDate(raw) {
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Fonte 1 — SintegraWS
-// URI: https://www.sintegraws.com.br/api/v1/execute-api.php?token=TOKEN&cpf=CPF&plugin=CPF
-// Retorna: nome, nome_mae, data_nascimento, situacao_cadastral, genero.sexo, uf
-// Token: cadastro grátis em sintegraws.com.br — plano gratuito com créditos
 // ─────────────────────────────────────────────────────────────────────────────
 async function trySintegra(cpf) {
   const token = process.env.CPF_TOKEN_SINTEGRA;
@@ -122,11 +119,6 @@ async function trySintegra(cpf) {
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Fonte 2 — APICPFBrasil
-// URI: POST https://apicpfbrasil.com.br/api/consulta/cpf
-// Header: Authorization: Bearer TOKEN
-// Body: { "cpf": "12345678901" }
-// Retorna: status_cpf, nome, birth_date
-// Token: cadastro em apicpfbrasil.com.br (cobrança por consulta com sucesso)
 // ─────────────────────────────────────────────────────────────────────────────
 async function tryApiCpfBrasil(cpf) {
   const token = process.env.CPF_TOKEN_APICPFBRASIL;
@@ -159,9 +151,6 @@ async function tryApiCpfBrasil(cpf) {
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Fonte 3 — AmnesiaTecnologia
-// URI: GET https://api.amnesiatecnologia.lat/?token=TOKEN&cpf=CPF
-// Retorna: DADOS.nome, DADOS.nome_mae, DADOS.data_nascimento, DADOS.sexo
-// Token: token gratuito — pode esgotar sob alta carga
 // ─────────────────────────────────────────────────────────────────────────────
 async function tryAmnesia(cpf) {
   const token = process.env.CPF_TOKEN_AMNESIA || "4c80cd47-d9d5-4672-a301-b9b8741fc293";
@@ -185,8 +174,6 @@ async function tryAmnesia(cpf) {
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Fonte 4 — AwesomeAPI (pública, sem token)
-// URI: GET https://api.awesomeapi.com.br/cpf/CPF
-// Retorna: nome, nome_mae, data_nascimento, sexo
 // ─────────────────────────────────────────────────────────────────────────────
 async function tryAwesome(cpf) {
   const { ok, data } = await fetchJson(`https://api.awesomeapi.com.br/cpf/${cpf}`);
