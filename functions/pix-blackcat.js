@@ -63,9 +63,17 @@ exports.handler = async (event) => {
   let body = {};
   try { body = event.body ? JSON.parse(event.body) : {}; } catch { body = {}; }
 
-  const rawAmount   = body.amount ?? body.valor ?? body.total ?? 65.70;
-  const amountReais = Number(rawAmount) || 65.70;
-  const amountCents = Math.round(amountReais * 100);
+  // Normaliza amount: aceita reais (65.70) ou centavos (6570)
+  // Heurística: valores >= 1000 e inteiros são tratados como centavos
+  const rawAmount = Number(body.amount ?? body.valor ?? body.total ?? 65.70) || 65.70;
+  let amountCents, amountReais;
+  if (Number.isInteger(rawAmount) && rawAmount >= 1000) {
+    amountCents = rawAmount;
+    amountReais = rawAmount / 100;
+  } else {
+    amountReais = rawAmount;
+    amountCents = Math.round(rawAmount * 100);
+  }
 
   const randId        = Math.random().toString(36).slice(2,10);
   const customerName  = (body.nome || body.name  || body.customer_name  || `Cliente ${randId}`).toString().trim();
